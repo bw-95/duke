@@ -6,87 +6,50 @@ import mochi.ui.*;
 import mochi.common.*;
 import mochi.common.exception.*;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
-
 public class InputProcessor {
-  private final TaskList taskList;
+  private Command cmd;
   public InputProcessor(TaskList taskList) {
-    this.taskList = taskList;
+    cmd = new Command(taskList);
   }
   public void processInput(String input) throws MochiException {
-    processInput(input, " ");
+    processInput(input," ");
   }
   public void processInput(String input,String delimiter) throws MochiException {
     String[] token = input.split(delimiter);
-    CommandEnum cmdType = CommandEnum.getValue(token[0]);
-    Command cmd = null;
-    switch (cmdType) {
+    CommandEnum command = CommandEnum.getValue(token[0]);
+    switch (command) {
       case DELETE:
-        cmd = new DeleteTaskCommand(taskList, token);
+        cmd.deleteTask(token);
         break;
       case MARK:
-        cmd = new MarkTaskCommand(taskList, token);
+        cmd.markTask(token);
         break;
       case UNMARK:
-        cmd = new UnMarkTaskCommand(taskList, token);
+        cmd.unMarkTask(token);
         break;
       case BYE:
         Ui.response(DialogMessages.BYE.getValue());
         break;
       case LIST:
-        if (token.length < 3) {
-          cmd = new ListTaskCommand(taskList,token);
-        }
-        else {
-          String tmpDate = "";
-          if (Objects.equals(token[2], "/before")) {
-            tmpDate = Utils.trimStringArrayWithStartEnd(token, "/before", "", " ");
-          }
-          if (Objects.equals(token[2], "/after")) {
-            tmpDate = Utils.trimStringArrayWithStartEnd(token, "/after", "", " ");
-          }
-          LocalDateTime isDate = DateTime.parse(tmpDate);
-          if (isDate != null) {
-            cmd = new ListTaskCommand(taskList, token);
-          }
-        }
-
+        cmd.listTask();
         break;
       case DEADLINE:
         String d_name = Utils.trimStringArrayWithStartEnd(token,"deadline","/by"," ");
         String by = Utils.trimStringArrayWithStartEnd(token,"/by",""," ");
-        LocalDateTime isDate = DateTime.parse(by);
-        if (isDate != null) {
-          cmd = new AddTaskCommand(this.taskList,new Deadline(d_name,by));
-        } else {
-          Ui.response("/by " + DialogMessages.INVALID_TASK.getValue());
-        }
+        cmd.addTask(new Deadline(d_name,by));
         break;
       case EVENT:
         String e_name = Utils.trimStringArrayWithStartEnd(token,"event","/from"," ");
         String from = Utils.trimStringArrayWithStartEnd(token,"/from","/to"," ");
         String to = Utils.trimStringArrayWithStartEnd(token,"/to",""," ");
-
-        LocalDateTime isFromDate = DateTime.parse(from);
-        LocalDateTime isToDate = DateTime.parse(to);
-        if ((isFromDate != null) && (isToDate != null)) {
-          cmd = new AddTaskCommand(this.taskList,new Event(e_name,from,to));
-        } else if (isFromDate == null) {
-          Ui.response("/from " + DialogMessages.INVALID_TASK.getValue());
-        } else {
-          Ui.response("/to " + DialogMessages.INVALID_TASK.getValue());
-        }
+        cmd.addTask(new Event(e_name,from,to));
         break;
       case TODO:
         String t_name = Utils.trimStringArrayWithStartEnd(token,"todo",""," ");
-        cmd = new AddTaskCommand(this.taskList,new Todo(t_name));
+        cmd.addTask(new Todo(t_name));
         break;
       default:
         throw new MochiException(DialogMessages.INPUT_UNKNOWN.getValue());
-    }
-    if(cmd != null) {
-      cmd.execute();
     }
   }
 }

@@ -1,8 +1,5 @@
 package mochi.tasks;
-/**
- * The Todo class represents a task with a basic message
- * It includes methods to convert it to a database-compatible format.
- */
+
 public class Todo extends Task{
 
   public Todo (String name) {
