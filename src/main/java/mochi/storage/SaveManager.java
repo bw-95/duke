@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class SaveManager {
     final static String POSTFIX = ".bk";
-    final static String BACKUP_FILE = "data/MochiSaves.txt";
+    final static String BACKUP_FILE = "MochiSaves.txt";
 
     final Path loadFile;
 
