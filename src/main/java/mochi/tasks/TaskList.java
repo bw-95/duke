@@ -186,11 +186,12 @@ public class TaskList implements AutoCloseable {
      * Prints the list of tasks to the console.
      */
     public void printTaskList() {
-        System.out.println(DialogMessages.LIST_TASK.getValue());
+        ArrayList<String> tmp = new ArrayList<>();
+        tmp.add(DialogMessages.LIST_TASK.getValue());
         for (Task i : _list) {
-            System.out.println(_list.indexOf(i) + 1 + "." + i.toString());
+            tmp.add(_list.indexOf(i) + 1 + "." + i.toString());
         }
-        Ui.printDivider();
+        Ui.responseFromArray(tmp);
     }
 
     /**
@@ -201,50 +202,53 @@ public class TaskList implements AutoCloseable {
      * @param date the date for filtering tasks.
      */
     public void printTaskList(String type, String op, String date) {
-        Ui.printDivider();
         if (op.isEmpty()) {
             printTaskListByType(type);
         } else {
-            System.out.println(DialogMessages.LIST_TASK_FILTERED.getValue());
+            ArrayList<String> tmp = new ArrayList<>();
+            tmp.add(DialogMessages.LIST_TASK_FILTERED.getValue());
             for (Task i : _list) {
                 if (Objects.equals(i.getType(), type)) {
                     if (i.compare(op, date)) {
-                        System.out.println(_list.indexOf(i) + 1 + "." + i);
+                        tmp.add(_list.indexOf(i) + 1 + "." + i);
                     }
                 }
             }
+            Ui.responseFromArray(tmp);
         }
-        Ui.printDivider();
     }
 
     public void printTaskListByType(String type) {
-        System.out.println(DialogMessages.LIST_TASK_FILTERED.getValue());
+        ArrayList<String> tmp = new ArrayList<>();
+        tmp.add(DialogMessages.LIST_TASK_FILTERED.getValue());
         for (Task i : _list) {
             if (Objects.equals(i.getType(), type)) {
-                System.out.println(_list.indexOf(i) + 1 + "." + i);
+                tmp.add(_list.indexOf(i) + 1 + "." + i);
             }
         }
-        Ui.printDivider();
+        Ui.responseFromArray(tmp);
     }
 
     public void printTaskListByName(String name) {
-        System.out.println(DialogMessages.LIST_TASK_FILTERED_NAME.getValue());
+        ArrayList<String> tmp = new ArrayList<>();
+        tmp.add(DialogMessages.LIST_TASK_FILTERED_NAME.getValue());
         for (Task i : _list) {
             if (i.getName().toLowerCase().contains(name.toLowerCase())) {
-                System.out.println(_list.indexOf(i) + 1 + "." + i);
+                tmp.add(_list.indexOf(i) + 1 + "." + i);
             }
         }
-        Ui.printDivider();
+        Ui.responseFromArray(tmp);
     }
 
     public void printTaskListByDate(LocalDate date) {
+        ArrayList<String> tmp = new ArrayList<>();
         assert date != null : "date cannot be null";
-        System.out.println(DialogMessages.LIST_TASK_FILTERED_DATE.getValue());
+        tmp.add(DialogMessages.LIST_TASK_FILTERED_DATE.getValue());
         for (Task i : _list) {
             if (i.fallsOnDate(date)) {
-                System.out.println(_list.indexOf(i) + 1 + "." + i);
+                tmp.add(_list.indexOf(i) + 1 + "." + i);
             }
         }
-        Ui.printDivider();
+        Ui.responseFromArray(tmp);
     }
 }

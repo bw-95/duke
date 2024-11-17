@@ -8,6 +8,7 @@ public class Utils {
      * Trims and concatenates elements from a string array, starting from a specified element and ending
      * before another specified element.
      * Elements are concatenated with a given delimiter.
+     *
      * @param string    the array of strings to process.
      * @param start     the starting string from which to begin concatenation (inclusive).
      * @param end       the ending string where concatenation stops (exclusive).

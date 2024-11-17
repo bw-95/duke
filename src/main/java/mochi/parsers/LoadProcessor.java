@@ -4,11 +4,7 @@ import mochi.commands.AddTaskCommand;
 import mochi.commands.Command;
 import mochi.common.DialogMessages;
 import mochi.common.exception.MochiException;
-import mochi.tasks.Deadline;
-import mochi.tasks.Event;
-import mochi.tasks.TaskList;
-import mochi.tasks.TaskType;
-import mochi.tasks.Todo;
+import mochi.tasks.*;
 
 public class LoadProcessor {
     private final TaskList taskList;

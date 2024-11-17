@@ -5,7 +5,10 @@ import mochi.storage.SaveManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -13,11 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class MochiTest {
     private final InputStream originalSystemIn = System.in;
     private final PrintStream originalSystemOut = System.out;
-    private ByteArrayOutputStream testOutput;
 
     @BeforeEach
     void setUpStreams() {
-        testOutput = new ByteArrayOutputStream();
+        ByteArrayOutputStream testOutput = new ByteArrayOutputStream();
         System.setOut(new PrintStream(testOutput));
     }
 
@@ -43,7 +45,7 @@ class MochiTest {
         String output = simulateInput(simulatedInput);
         generalCheck(output);
         assertTrue(output.contains("[E][ ] Buy milk (from: Nov 11 2024, 12:00AM to: Nov 11 2024, 8:00AM)"),
-          "Expected event output does not match actual output.");
+                "Expected event output does not match actual output.");
         // Reset streams
         System.setIn(originalSystemIn);
         System.setOut(originalSystemOut);
@@ -90,8 +92,8 @@ class MochiTest {
     }
 
     private String simulateInput(String input) {
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
-        Mochi.main(new String[]{});
-        return testOutput.toString();
+        //Mochi.main(new String[]{});
+        Mochi mochi = new Mochi();
+        return mochi.getResponse(input);
     }
 }
