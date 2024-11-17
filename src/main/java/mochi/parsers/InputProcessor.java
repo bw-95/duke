@@ -88,6 +88,8 @@ public class InputProcessor {
                 if (token.length > 1) {
                     String findVar = Utils.trimStringArrayWithStartEnd(token, "find", "", " ");
                     cmd = new FindCommand(taskList, findVar);
+                } else {
+                    Ui.response(ExceptionMessages.FIND_INVALID);
                 }
                 break;
             case VIEW:
